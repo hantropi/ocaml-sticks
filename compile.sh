@@ -1,1 +1,1 @@
-ocamlopt params.ml batonnets.ml -o batonnets
+ocamlopt params.ml game.ml -o game
