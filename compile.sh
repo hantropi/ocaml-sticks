@@ -1,1 +1,1 @@
-ocamlopt -o batonnets batonnets.ml params.ml
+ocamlopt params.ml batonnets.ml -o batonnets

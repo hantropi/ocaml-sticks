@@ -2,7 +2,9 @@
 
 (* initSticks : Initialize the list of sticks
  *)
-let rec initSticks number = true;;
+let rec initSticks number =
+  if number <= 0 then []
+  else 1::initSticks(number - 1);;
 
 (* displaySticks : Display the sticks on the screen
 list(int) -> unit () *)
@@ -13,6 +15,5 @@ let rec displaySticks list =
               else print_string "+ ";
               displaySticks tl;;
 
-(*let list = initSticks params.nbrSticks;;*)
-let list = [1; 1; 0; 1];;
+let list = initSticks Params.nbrSticks;;
 displaySticks list;;
