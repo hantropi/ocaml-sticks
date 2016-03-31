@@ -32,12 +32,22 @@ let displayNumbers number =
    list(int) -> unit ()
 *)
 let rec displayAll list =
-  displaySticks list;
+  displaySticks list; (* Voir si on garde l'affichage des numeros *)
   displayNumbers (List.length(list));;
 
 let askRow () =
   let row = read_int() in row;;
 
+let main list =
+  let quit_loop = ref false in
+  while not !quit_loop do
+    displayAll list;
+    print_string "> ";
+    let row = read_int () in
+    if row > 0 then (print_int row; print_char '\n')
+    else quit_loop := true
+  done;;
+
 (* Main *)
 let list = initSticks Params.nbrSticks;;
-displayAll list;;
+main list;;
