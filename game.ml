@@ -12,10 +12,28 @@ list(int) -> unit ()
  *)
 let rec displaySticks list =
   match list with
-  | [] -> print_string "\n"
-  | hl::tl -> if (hl = 1) then print_string "| "
-              else print_string "+ ";
+  | [] -> print_char '\n'
+  | hl::tl -> if (hl = 1) then print_char '|'
+              else print_char '+';
+              print_char ' ';
               displaySticks tl;;
 
+(* displayNumbers : Display the number below each stick
+int -> unit ()
+ *)
+let displayNumbers number =
+  for i = 0 to number do
+  print_int i;
+  print_char ' ';
+  done;
+  print_char '\n';;
+
+(* displayAll : Display the sticks and the numbers
+list(int) -> unit ()
+ *)
+let rec displayAll list =
+  displaySticks list;
+  displayNumbers (List.length(list));;
+
 let list = initSticks Params.nbrSticks;;
-displaySticks list;;
+displayAll list;;
