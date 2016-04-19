@@ -11,7 +11,7 @@ let rec initSticks number =
 let rec displaySticks list =
   match list with
   | [] -> print_char '\n'
-  | hl::tl -> if (hl = 1) then print_char '|'
+  | hl::tl -> if hl = 1 then print_char '|'
     else print_char '+';
     print_char ' ';
     displaySticks tl;;
@@ -34,14 +34,25 @@ let rec displayAll list =
 let askRow () =
   let row = read_int() in row;;
 
+let victory list =
+  let nbrSticks = ref 0 in
+  for i = 0 to (List.length(list) - 1) do
+    if (List.nth list i) = 1 then incr nbrSticks
+  done;
+  if !nbrSticks <= 1 then true else false;;
+
 let main list =
-  let quit_loop = ref false in
-  while not !quit_loop do
-    displayAll list;
-    print_string "> ";
-    let row = read_int () in
-    if row >= 0 then () (*print_int row; print_char '\n'*)
-    else quit_loop := true
+  let quitLoop = ref false in
+  while not !quitLoop do (* Main loop *)
+    let validAsk = ref false in
+    while not !validAsk do (* Ask the player *)
+      displayAll list;
+      print_string "> ";
+      let row = read_int () in
+      if row >= 0 then (print_int row; print_char '\n')
+      else validAsk := true
+    done;
+    quitLoop := true
   done;;
 
 (* Main *)
