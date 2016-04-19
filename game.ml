@@ -1,15 +1,13 @@
 (** Game **)
 
 (* initSticks : Initialize the list of sticks
-   int -> list(int)
-*)
+   int -> list(int) *)
 let rec initSticks number =
   if number <= 0 then []
   else 1::initSticks(number - 1);;
 
 (* displaySticks : Display the sticks on the screen
-   list(int) -> unit ()
-*)
+   list(int) -> unit () *)
 let rec displaySticks list =
   match list with
   | [] -> print_char '\n'
@@ -19,8 +17,7 @@ let rec displaySticks list =
     displaySticks tl;;
 
 (* displayNumbers : Display the number below each stick
-   int -> unit ()
-*)
+   int -> unit () *)
 let displayNumbers number =
   for i = 0 to number do
     print_int i;
@@ -29,8 +26,7 @@ let displayNumbers number =
   print_char '\n';;
 
 (* displayAll : Display the sticks and the numbers
-   list(int) -> unit ()
-*)
+   list(int) -> unit () *)
 let rec displayAll list =
   displaySticks list; (* Voir si on garde l'affichage des numeros *)
   displayNumbers (List.length(list));;
@@ -44,7 +40,7 @@ let main list =
     displayAll list;
     print_string "> ";
     let row = read_int () in
-    if row > 0 then (print_int row; print_char '\n')
+    if row >= 0 then () (*print_int row; print_char '\n'*)
     else quit_loop := true
   done;;
 
