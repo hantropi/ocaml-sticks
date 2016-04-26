@@ -19,7 +19,7 @@ let rec displaySticks list =
 (* displayNumbers : Display the number below each stick
    int -> unit () *)
 let displayNumbers number =
-  for i = 0 to number do
+  for i = 0 to (number - 1) do
     print_int i;
     print_char ' ';
   done;
@@ -31,9 +31,43 @@ let rec displayAll list =
   displaySticks list; (* Voir si on garde l'affichage des numeros *)
   displayNumbers (List.length(list));;
 
-let askRow () =
-  let row = read_int() in row;;
+(* askRow : *)
+let askRow list =
+  print_string "> ";
+  let row = read_int () in
+  if row >= 0 && row < List.length(list) then row
+  else 100;;
 
+(* validMove : *)
+let rec validMove list maxBat valInter =
+  match list with
+  | [] -> true
+  | hd::tl -> if valInter = maxBat then true
+    else if hd = 1 && valInter < maxBat then validMove tl maxBat (valInter + 1)
+    else false;;
+
+(* goTo :
+   int * int * list(int) -> list(int)
+   startPos, endPos, list -> supprime la liste jusqu'à la position endPos (position endPos exclus) *)
+let rec goTo startPos endPos list =
+  if startPos >= endPos then list
+  else goTo (startPos + 1) endPos (List.tl(list));;
+
+(* validLength : *)
+let validLength startPos endPos rmSticks list =
+  if endPos - startPos + 1 > rmSticks then false
+  else let list = goTo 0 startPos list in
+    if endPos - startPos + 1 > List.length(list) then false
+    else validMove list (endPos - startPos + 1) 0;;
+
+(* removeSticks : *)
+let rec removeSticks startPos endPos valInter list =
+  match list with
+  | [] -> []
+  | hd::tl -> if valInter >= startPos && valInter <= endPos then 0::(removeSticks startPos endPos (valInter+1) tl)
+    else hd::(removeSticks startPos endPos (valInter+1) tl);;
+
+(* victory : *)
 let victory list =
   let nbrSticks = ref 0 in
   for i = 0 to (List.length(list) - 1) do
@@ -41,20 +75,23 @@ let victory list =
   done;
   if !nbrSticks <= 1 then true else false;;
 
+(* main : *)
 let main list =
   let quitLoop = ref false in
   while not !quitLoop do (* Main loop *)
     let validAsk = ref false in
     while not !validAsk do (* Ask the player *)
-      displayAll list;
-      print_string "> ";
-      let row = read_int () in
-      if row >= 0 then (print_int row; print_char '\n')
-      else validAsk := true
+      displayAll !list;
+      let startRow = askRow !list in
+      let endRow = askRow !list in
+      if validLength startRow endRow Params.rmSticks !list then
+        (list := removeSticks startRow endRow 0 !list;
+         validAsk := true);
     done;
-    quitLoop := true
+    if victory !list then quitLoop := true;
   done;;
 
 (* Main *)
-let list = initSticks Params.nbrSticks;;
+let list = ref (initSticks Params.nbrSticks);;
 main list;;
+displayAll !list;;

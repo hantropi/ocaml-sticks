@@ -3,4 +3,4 @@
 (* Number of sticks *)
 let nbrSticks = 20;;
 (* Number of removable sticks *)
-let rmvSticks = 3;;
+let rmSticks = 3;;
