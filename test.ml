@@ -21,7 +21,7 @@ let rec validMove(c, d, e, f, l2) =
   else
     if(f = e || l2 = []) then true
     else
-      if(List.hd(l2) = 1 && f < e) then validMove(c, d, e, f, List.tl(l2))
+      if(List.hd(l2) = 1 && f <= e) then validMove(c, d, e, f+1, List.tl(l2))
       else false;;
 
 let rec goTo(a, b, l1) =
