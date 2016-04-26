@@ -14,9 +14,6 @@
         e = le nombre de batonnets que le joueur peut retirer à la fois
         f = valeur intermédiaire qui vaut 1 à l'initialisation
         l2 = liste qui a subit la methode goTo
-
-   Si les batonnets sont numerotés de 0 à n alors if((d-c)+1 > e) then false (...)
- Sinon si les batonnets sont numerotés de 1 à n alors if(d-c > e) then false (...)
 *)
 
 let rec validMove(c, d, e, f, l2) =
