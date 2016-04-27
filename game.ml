@@ -42,7 +42,7 @@ let displayPlayer player =
 let askRow list =
   let row = read_int () in
   if row >= 0 && row < List.length(list) then row
-  else 100;;
+  else -2;;
 
 (* validMove : *)
 let rec validMove list maxBat valInter =
