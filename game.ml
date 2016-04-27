@@ -8,13 +8,15 @@ let rec initSticks number =
 
 (* displaySticks : Display the sticks on the screen
    list(int) -> unit () *)
-let rec displaySticks list =
+let rec displaySticks list i =
   match list with
   | [] -> print_char '\n'
   | hl::tl -> if hl = 1 then print_string "\027[33m|"
     else print_string "\027[35m+";
-    print_string "\027[39m ";
-    displaySticks tl;;
+    if i < 10 then print_string "\027[39m "
+    else if i < 100 then print_string "\027[39m  "
+    else print_string "\027[39m   ";
+    displaySticks tl (i + 1);;
 
 (* displayNumbers : Display the number below each stick
    int -> unit () *)
@@ -28,7 +30,7 @@ let displayNumbers number =
 (* displayAll : Display the sticks and the numbers
    list(int) -> unit () *)
 let displayAll list =
-  displaySticks list; (* Voir si on garde l'affichage des numeros *)
+  displaySticks list 0; (* Voir si on garde l'affichage des numeros *)
   displayNumbers (List.length(list));;
 
 let displayPlayer player =
