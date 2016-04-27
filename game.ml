@@ -11,9 +11,9 @@ let rec initSticks number =
 let rec displaySticks list =
   match list with
   | [] -> print_char '\n'
-  | hl::tl -> if hl = 1 then print_char '|'
-    else print_char '+';
-    print_char ' ';
+  | hl::tl -> if hl = 1 then print_string "\027[33m|"
+    else print_string "\027[35m+";
+    print_string "\027[39m ";
     displaySticks tl;;
 
 (* displayNumbers : Display the number below each stick
@@ -27,13 +27,17 @@ let displayNumbers number =
 
 (* displayAll : Display the sticks and the numbers
    list(int) -> unit () *)
-let rec displayAll list =
+let displayAll list =
   displaySticks list; (* Voir si on garde l'affichage des numeros *)
   displayNumbers (List.length(list));;
 
+let displayPlayer player =
+  if (player mod 2) == 0 then print_string "\027[32mPLAYER 2"
+  else print_string "\027[34mPLAYER 1";
+  print_string "> \027[39m";;
+
 (* askRow : *)
 let askRow list =
-  print_string "> ";
   let row = read_int () in
   if row >= 0 && row < List.length(list) then row
   else 100;;
@@ -76,19 +80,27 @@ let victory list =
   if !nbrSticks <= 1 then true else false;;
 
 (* loop : *)
-let rec loop list =
+let rec askLoop list player =
   displayAll !list;
+  displayPlayer !player;
   let startRow = askRow !list in
+  displayPlayer !player;
   let endRow = askRow !list in
   if validLength startRow endRow Params.rmSticks !list
-  then list := removeSticks startRow endRow 0 !list
-  else loop list;;
+  then (list := removeSticks startRow endRow 0 !list; incr player)
+  else (print_string "\027[31mINPUT ERROR !\027[39m\n";
+        askLoop list player);;
 
 (* main : *)
-let rec main list =
-  loop list;
-  if not (victory !list) then main list;;
+let rec main list player =
+  askLoop list player;
+  if not (victory !list) then main list player;;
 
 let list = ref (initSticks Params.nbrSticks);;
-main list;;
+let player = ref 1;;
+main list player;;
 displayAll !list;;
+print_string "\027[36mPLAYER ";;
+if (!player mod 2) == 0 then print_int 1
+else print_int 2;; (* On inverse car on incremente a la fin de la partie *)
+print_string " WIN !\n";;
