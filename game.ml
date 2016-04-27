@@ -75,23 +75,20 @@ let victory list =
   done;
   if !nbrSticks <= 1 then true else false;;
 
-(* main : *)
-let main list =
-  let quitLoop = ref false in
-  while not !quitLoop do (* Main loop *)
-    let validAsk = ref false in
-    while not !validAsk do (* Ask the player *)
-      displayAll !list;
-      let startRow = askRow !list in
-      let endRow = askRow !list in
-      if validLength startRow endRow Params.rmSticks !list then
-        (list := removeSticks startRow endRow 0 !list;
-         validAsk := true);
-    done;
-    if victory !list then quitLoop := true;
-  done;;
+(* loop : *)
+let rec loop list =
+  displayAll !list;
+  let startRow = askRow !list in
+  let endRow = askRow !list in
+  if validLength startRow endRow Params.rmSticks !list
+  then list := removeSticks startRow endRow 0 !list
+  else loop list;;
 
-(* Main *)
+(* main : *)
+let rec main list =
+  loop list;
+  if not (victory !list) then main list;;
+
 let list = ref (initSticks Params.nbrSticks);;
 main list;;
 displayAll !list;;
