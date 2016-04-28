@@ -25,7 +25,7 @@ let rec displayBoard board i =
   | [] -> print_char '\n'
   | hl::tl ->
     (* Display | : Intact or + : Crossed *)
-    if hl = Intact then print_string "\027[33m|"
+    if hl == Intact then print_string "\027[33m|"
     else print_string "\027[35m+";
     (* Display spaces between the sticks *)
     if i < 10 then print_string "\027[39m "
