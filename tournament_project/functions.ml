@@ -1,4 +1,5 @@
-(* Structures definition *)
+(** Structures definition **)
+
 type tournamentStick = Intact | Crossed;;
 type tournamentBoard = tournamentStick list;;
 type tournamentConfiguration = {pve : bool; nbrOfSticks : int; nbrMaxOfSticksToRemove : int; timeoutInMilliseconds : int;};;
@@ -16,7 +17,8 @@ let getNbrMaxOfSticksToRemove = function
 let getTimeoutInMilliseconds = function
     {pve = _; nbrOfSticks = _; nbrMaxOfSticksToRemove = _; timeoutInMilliseconds = n} -> n;;
 
-(* initBoard : *)
+(* initBoard :
+   int -> tournamentBoard *)
 let rec initBoard number =
   if number <= 0 then []
   else Intact::initBoard(number - 1);;
@@ -45,13 +47,15 @@ let rec displayNumbers number i =
      displayNumbers (number - 1) (i + 1))
   else print_char '\n';;
 
-(* displayPlayer : *)
+(* displayPlayer : Display the current player's number
+   int -> unit () *)
 let displayPlayer player =
   if (player mod 2) == 0 then print_string "\027[32mPLAYER 2"
   else print_string "\027[34mPLAYER 1";
   print_string "> \027[39m";;
 
-(* removeSticks : *)
+(* removeSticks : Remove the sticks between startPos and endPos and return the board
+   tournamentBoard * int * int * int -> tournamentBoard *)
 let rec removeSticks board startPos endPos i =
   match board with
   | [] -> []
@@ -59,7 +63,8 @@ let rec removeSticks board startPos endPos i =
     if i >= startPos && i <= endPos then Crossed::(removeSticks tl startPos endPos (i + 1))
     else hd::(removeSticks tl startPos endPos (i + 1));;
 
-(* countSticks : *)
+(* countSticks : Count the number of intact sticks in the board
+   tournamentBoard -> int *)
 let rec countSticks board =
   match board with
   | [] -> 0

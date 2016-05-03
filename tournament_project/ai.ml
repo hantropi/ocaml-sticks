@@ -1,6 +1,7 @@
-(* AI functions *)
+(** Ai functions **)
 
-(* numberOfSticksToRemove : *)
+(* numberOfSticksToRemove : Check the number of sticks to remove from the current board
+   int -> int *)
 let numberOfSticksToRemove count =
   if count <= 20 && count > 17 then 3
   else if count <= 17 && count > 13 then count - 13
@@ -8,25 +9,28 @@ let numberOfSticksToRemove count =
   else if count <= 9 && count > 5 then count - 5
   else 3;;
 
-(* determineStartPos : *)
-let rec determineStartPos board numberToRemove startPos i =
+(* defineStartPos : Determine the first position where the AI can remove the sticks depending on numberToRemove
+   tournamentBoard * int * int * int -> int *)
+let rec defineStartPos board numberToRemove startPos i =
   match board with
   | [] ->
     if (i - startPos) == numberToRemove then startPos
     else -2
   | hd::tl ->
     if (i - startPos) == numberToRemove then startPos
-    else if hd == Functions.Intact && startPos == i then determineStartPos tl numberToRemove i (i + 1)
-    else if hd == Functions.Intact && startPos >= 0 then determineStartPos tl numberToRemove startPos (i + 1)
-    else determineStartPos tl numberToRemove (i + 1) (i + 1);;
+    else if hd == Functions.Intact && startPos == i then defineStartPos tl numberToRemove i (i + 1)
+    else if hd == Functions.Intact && startPos >= 0 then defineStartPos tl numberToRemove startPos (i + 1)
+    else defineStartPos tl numberToRemove (i + 1) (i + 1);;
 
-(* getStartPos : *)
+(* getStartPos : Get the startPos value
+   tournamentBoard * int -> int *)
 let rec getStartPos board numberToRemove =
-  let startPos = determineStartPos board numberToRemove 0 0 in
+  let startPos = defineStartPos board numberToRemove 0 0 in
   if startPos >= 0 then startPos, numberToRemove
   else getStartPos board (numberToRemove - 1);;
 
-(* askAi : *)
+(* askAi :
+   tournamentBoard * int -> tournamentBoard *)
 let askAi board player =
   let count = Functions.countSticks board in
   let numberToRemove = numberOfSticksToRemove count in

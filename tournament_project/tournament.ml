@@ -1,6 +1,7 @@
 (** Tournament **)
 
-(*pveLoop : (Run only with 20 sticks) *)
+(* pveLoop : (Run only with 20 sticks) Loop for Player versus AI game
+   tournamentBoard * int * int -> unit () *)
 let pveLoop board nbrMaxOfSticksToRemove player =
   (* Display all the informations *)
   Functions.displayBoard !board 0;
@@ -10,7 +11,8 @@ let pveLoop board nbrMaxOfSticksToRemove player =
   else (* Ask the AI *)
     board := Ai.askAi !board player;;
 
-(* pvpLoop : *)
+(* pvpLoop : (Run with any number of sticks) Loop for Player versus Player game
+   tournamentBoard * int * int -> unit () *)
 let pvpLoop board nbrMaxOfSticksToRemove player =
   (* Display all the informations *)
   Functions.displayBoard !board 0;
@@ -18,12 +20,14 @@ let pvpLoop board nbrMaxOfSticksToRemove player =
   (* Ask the player *)
   board := Player.askPlayer !board nbrMaxOfSticksToRemove player;;
 
-(* victory : *)
+(* victory : Check the board
+   tournamentBoard -> bool *)
 let victory board =
   if Functions.countSticks board <= 1 then true
   else false;;
 
-(* tournamentPlay : *)
+(* tournamentPlay : Main function of the game
+   tournamentBoard * tournamentConfiguration * int -> unit () *)
 let rec tournamentPlay board config player =
   if (Functions.getPve config) then pveLoop board (Functions.getNbrMaxOfSticksToRemove config) !player
   else pvpLoop board (Functions.getNbrMaxOfSticksToRemove config) !player;
